@@ -15,6 +15,15 @@ class Board
     @grid[row][column] = marker
   end
 
+  def available_row(column)
+    row = 0
+    loop do
+      return row if row == 5 || @grid[row + 1][column] != 0
+
+      row += 1
+    end
+  end
+
   def check_target_horizontal(row, column, symbol)
     return if column > 3
 
@@ -50,5 +59,18 @@ class Board
     @grid[row + 2][column + 2] == symbol && 
     @grid[row + 3][column + 3] == symbol
   end
-  
+
+  def full_column?(input)
+    @grid[0][input] != 0
+  end
+
+  def check_row(row, column, symbol)
+    check_target_horizontal(row, column, symbol) || check_target_vertical(row, column, symbol) || check_diagonals(row, column, symbol)
+  end
+
+  def check_diagonals(row, column, symbol)
+    return unless row < 3
+
+    check_target_right_diagonal(row, column, symbol) || check_target_left_diagonal(row, column, symbol)
+  end
 end
